@@ -1,0 +1,60 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dodo
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d dodo"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer:4.8.1
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    ports:
+      - "8081:8080"
+
+  mock-psp:
+    build: .
+    image: dodo-invoices:local
+    command: ["mock_psp"]
+    environment:
+      MOCK_PSP_ADDR: 0.0.0.0:4000
+      MOCK_TIMEOUT_SECS: "30"
+      RUST_LOG: info
+    ports:
+      - "4000:4000"
+
+  api:
+    image: dodo-invoices:local
+    command: ["api"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mock-psp:
+        condition: service_started
+    environment:
+      API_ADDR: 0.0.0.0:8080
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/dodo
+      PSP_URL: http://mock-psp:4000
+      PSP_TIMEOUT_MS: "5000"
+      RECONCILE_INTERVAL_SECS: "15"
+      RECONCILE_AFTER_SECS: "60"
+      DEMO_API_KEY: sk_live_demo_4f9a2c7e1b8d3f6a0c5e9b2d7f1a4c8e
+      RUST_LOG: info,dodo_invoices=debug,tower_http=info
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:
