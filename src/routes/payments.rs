@@ -4,7 +4,7 @@
 //! 2. One transaction: lock the invoice with a conditional UPDATE and insert a
 //!    pending payment attempt. Commit BEFORE calling the PSP, so a crash
 //!    always leaves a record the reconciler can find.
-//! 3. Call the PSP with the attempt id as its idempotency key (5 s timeout).
+//! 3. Call the PSP with the attempt id as its idempotency key (1 s timeout).
 //! 4. Success or decline: settle. Timeout or network error: leave it locked,
 //!    return 202, and let the reconciler find out what happened.
 

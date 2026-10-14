@@ -96,7 +96,7 @@ The invoice goes back to `open`, so the customer can retry with another card and
 |---|---|
 | `tok_success` | 200, invoice paid |
 | `tok_card_declined` / `tok_insufficient_funds` | 402, invoice back to its previous state |
-| `tok_timeout` | 202 after 5 s, invoice `locked`. The reconciler marks it paid about a minute later. |
+| `tok_timeout` | 202 after 1 s, invoice `locked`. The reconciler marks it paid about a minute later. |
 | `tok_network_error` | 202, invoice `locked`. The reconciler finds no charge and releases it. |
 
 ## Testing
@@ -162,7 +162,7 @@ seq 1 20 | xargs -P 20 -I{} curl -s -o /dev/null -w '%{http_code}\n' \
 Expect one `200` and nineteen `409`. `curl -s http://localhost:4000/stats` shows the
 PSP charge count went up by exactly one.
 
-**Timeout.** Pay a new invoice with `tok_timeout`. The call returns 202 after 5 seconds and
+**Timeout.** Pay a new invoice with `tok_timeout`. The call returns 202 after 1 second and
 the invoice is `locked`. Within about 75 seconds it becomes `paid`.
 Watch it happen with `docker compose logs -f api`.
 
@@ -172,7 +172,7 @@ Watch it happen with `docker compose logs -f api`.
 |---|---|---|
 | `DATABASE_URL` | `postgres://postgres:postgres@localhost:5432/dodo` | Postgres connection |
 | `PSP_URL` | `http://localhost:4000` | Mock PSP base URL |
-| `PSP_TIMEOUT_MS` | `5000` | Give up on a PSP call after this long |
+| `PSP_TIMEOUT_MS` | `1000` | Give up on a PSP call after this long |
 | `RECONCILE_INTERVAL_SECS` | `15` | How often the reconciler runs |
 | `RECONCILE_AFTER_SECS` | `60` | How long an invoice must be locked before the reconciler checks it |
 | `DISPATCH_INTERVAL_MS` | `1000` | How often the webhook dispatcher polls |

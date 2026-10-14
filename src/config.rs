@@ -26,7 +26,7 @@ impl Config {
             api_addr: "0.0.0.0:8080".into(),
             database_url: "postgres://postgres:postgres@localhost:5432/dodo".into(),
             psp_url: psp_url.into(),
-            psp_timeout: Duration::from_millis(5_000),
+            psp_timeout: Duration::from_millis(1_000),
             reconcile_interval: Duration::from_secs(15),
             reconcile_after: Duration::from_secs(60),
             dispatch_interval: Duration::from_millis(1_000),
@@ -38,7 +38,7 @@ impl Config {
         let mut c = Self::local(var("PSP_URL", "http://localhost:4000"));
         c.api_addr = var("API_ADDR", &c.api_addr);
         c.database_url = var("DATABASE_URL", &c.database_url);
-        c.psp_timeout = Duration::from_millis(num("PSP_TIMEOUT_MS", 5_000));
+        c.psp_timeout = Duration::from_millis(num("PSP_TIMEOUT_MS", 1_000));
         c.reconcile_interval = Duration::from_secs(num("RECONCILE_INTERVAL_SECS", 15));
         c.reconcile_after = Duration::from_secs(num("RECONCILE_AFTER_SECS", 60));
         c.dispatch_interval = Duration::from_millis(num("DISPATCH_INTERVAL_MS", 1_000));

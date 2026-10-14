@@ -3676,7 +3676,7 @@
           ]
         },
         {
-          "name": "Pay with tok_timeout -> 202 after ~5s",
+          "name": "Pay with tok_timeout -> 202 after ~1s",
           "request": {
             "method": "POST",
             "header": [
@@ -3726,7 +3726,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"Status is 202\", () => pm.response.to.have.status(202));",
-                  "pm.test(\"Gave up at the PSP client timeout, not the mock's 30s\", () => pm.expect(pm.response.responseTime).to.be.within(4000, 25000));",
+                  "pm.test(\"Gave up at the PSP client timeout, not the mock's 30s\", () => pm.expect(pm.response.responseTime).to.be.within(800, 25000));",
                   "pm.test(\"Invoice locked\", () => pm.expect(pm.response.json().invoice.state).to.eql(\"locked\"));"
                 ]
               }

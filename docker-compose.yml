@@ -48,7 +48,7 @@ services:
       API_ADDR: 0.0.0.0:8080
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/dodo
       PSP_URL: http://mock-psp:4000
-      PSP_TIMEOUT_MS: "5000"
+      PSP_TIMEOUT_MS: "1000"
       RECONCILE_INTERVAL_SECS: "15"
       RECONCILE_AFTER_SECS: "60"
       DEMO_API_KEY: sk_live_demo_4f9a2c7e1b8d3f6a0c5e9b2d7f1a4c8e
