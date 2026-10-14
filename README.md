@@ -201,4 +201,6 @@ tests/
 
 ## Demo Video
 
-_Add your Loom or Drive link here. It must open without a login._
+https://www.youtube.com/watch?v=sbt5hYZ3yks
+
+Covers the architecture overview, a live demo, the state machine walkthrough, and a failure-mode walkthrough.
